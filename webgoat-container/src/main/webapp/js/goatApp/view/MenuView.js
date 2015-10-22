@@ -50,7 +50,7 @@ define(['jquery',
 					for (var j=0; j < lessons.length;j++) {
 						var lessonItem = $('<li>',{class:'lesson'});
 						var lessonName = lessons[j].name;
-						var lessonId = GoatUtils.makeId(lessonName);
+						var lessonId = catId + '-' + GoatUtils.makeId(lessonName);
 						if (this.curLessonLinkId === lessonId) {
 							lessonItem.addClass('selected');
 						}
@@ -66,7 +66,7 @@ define(['jquery',
 						for (k=0; k < stages.length; k++) {
 							var stageItem = $('<li>',{class:'stage'});
 							var stageName = stages[k].name;
-							var stageId = GoatUtils.makeId(stageName);
+							var stageId = lessonId + '-' + GoatUtils.makeId(stageName);
 							if (this.curLessonLinkId === stageId) {
 								stageItem.addClass('selected');
 							}
