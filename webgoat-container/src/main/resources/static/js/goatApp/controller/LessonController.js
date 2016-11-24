@@ -61,7 +61,7 @@ define(['jquery',
                 this.menuButtonView = new MenuButtonView();
             };
 
-            this.loadLesson = function(name,pageNum) {
+            this.loadLesson = function(name, pageNum) {
                 if (this.name === name) {
                     this.lessonContentView.navToPage(pageNum)
                     return;

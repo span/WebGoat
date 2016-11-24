@@ -1,20 +1,25 @@
 define(['jquery',
     'underscore',
     'backbone',
+    'goatApp/controller/CategoryController',
     'goatApp/controller/LessonController',
     'goatApp/controller/MenuController',
+    'goatApp/view/CategoryView',
     'goatApp/view/LessonContentView',
     'goatApp/view/MenuView',
     'goatApp/view/DeveloperControlsView'
     ], function ($,
     _,
     Backbone,
+    CategoryController,
     LessonController,
     MenuController,
+    CategoryView,
     LessonContentView,
     MenuView,
     DeveloperControlsView) {
-    
+
+    var categoryView = new CategoryView();
     var lessonContentView = new LessonContentView();
     var menuView = new MenuView();
     var developerControlsView = new DeveloperControlsView();
@@ -22,11 +27,15 @@ define(['jquery',
     var GoatAppRouter = Backbone.Router.extend({
         routes: {
             'welcome':'welcomeRoute',
+            'category/:name':'categoryRoute',
             'lesson/:name':'lessonRoute',
             'lesson/:name/:pageNum':'lessonPageRoute',
             'test/:param':'testRoute'
         },
 
+        categoryController: new CategoryController({
+            categoryView: categoryView
+        }),
 
         lessonController: new LessonController({
             lessonContentView: lessonContentView
@@ -58,14 +67,18 @@ define(['jquery',
         },
 
         init:function() {
-            goatRouter =  new GoatAppRouter();
+            var goatRouter =  new GoatAppRouter();
             this.lessonController.start();
             // this.menuController.initMenu();
-            webgoat = {};
+            var webgoat = {};
             webgoat.customjs = {};
 
             this.setUpCustomJS();
 
+
+            goatRouter.on('route:categoryRoute', function(name) {
+                this.categoryController.loadCategory(name);
+            });
 
             goatRouter.on('route:lessonRoute', function(name) {
                 this.lessonController.loadLesson(name,0);
@@ -95,7 +108,7 @@ define(['jquery',
             goatRouter.on("route", function(route, params) {});
 
             Backbone.history.start();
-            this.listenTo(this.lessonController, 'menu:reload',this.reloadMenu)
+            this.listenTo(this.lessonController, 'menu:reload', this.reloadMenu)
         },
 
         reloadMenu: function (curLesson) {
